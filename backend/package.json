@@ -1,0 +1,12 @@
+{
+  "main":"index.js",
+  "type":"module",
+  "name":"lamapin-api",
+  "scripts":{
+    "dev":"node --watch --env-file=.env index.js"
+  },
+  "dependencies": {
+
+    "express": "^5.1.0"
+  }
+}
