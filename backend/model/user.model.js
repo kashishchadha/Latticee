@@ -19,7 +19,7 @@ const userSchema=new Schema({
     },
        hashPassword:{
         type:String,
-        required:true
+       required: true,
     },
 },{timestamps:true});
 export default mongoose.model("User",userSchema);

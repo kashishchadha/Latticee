@@ -7,8 +7,8 @@ function GalleryItem({item}) {
   const optimizedheight=(372*item.height)/item.width
   return (
     <div className='galleryItem' style={{gridRowEnd:`span ${Math.ceil(item.height/100)}`}}>
-        <Image path={item.media}  alt='' h={optimizedheight} w={372}/>
-        <Link to={`/pin/${item.id}`} className='overlay'></Link>
+        <Image src={item.media}  alt='' h={optimizedheight} w={372}/>
+        <Link to={`/pin/${item._id}`} className='overlay'></Link>
         <button className='saveButton'>Save</button>
 
         <div className="overlayIcons">

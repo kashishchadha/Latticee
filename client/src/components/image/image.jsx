@@ -1,11 +1,12 @@
 import React from 'react'
 import {IKImage} from 'imagekitio-react'
 
-function Image({path,classname,alt,w,h}) {
+function Image({path,src,classname,alt,w,h}) {
   return (
    <IKImage 
           urlEndpoint={import.meta.env.VITE_URL_IK_ENDPOINT} 
           path={path}
+          src={src}
           transformation={[{
             width: w,
             height:h

@@ -1,10 +1,24 @@
 import React, { useState } from 'react'
 import Image from '../../components/image/image'
 import './authPage.css'
+import apiRequest from '../../utils/apiRequest';
 
 function AuthPage() {
    const [ isRegister,setIsRegister]=useState(false);
-    const [error,_setError]=useState("");
+    const [error,setError]=useState("");
+
+    const handleSubmit= async(e)=>{
+      e.preventDefault();
+      const formData=new FormData(e.target)
+      const data = Object.fromEntries(formData)
+      
+      try{
+await apiRequest.post("/user/auth/register", data)
+
+      }catch(error){
+        setError(error.data)
+      }
+    }
   return (
    
 
@@ -14,15 +28,15 @@ function AuthPage() {
         <h1>{isRegister?"Create an Account ":"Login to Your Account"}</h1>
 {isRegister?(
 
-        <form key="registerForm">
+        <form key="registerForm" onSubmit={handleSubmit}>
  <div className="formGroup">
             <label htmlFor='Username'>Username</label>
-            <input type='Username' placeholder='Username' required name="Username" id='username'></input>
+            <input type='username' placeholder='Username' required name="username" id='username'></input>
           </div>
 
  <div className="formGroup">
             <label htmlFor='displayName'>Name</label>
-            <input type='displayName' placeholder='displayName' required name="displayName" id='displayName'></input>
+            <input type='displayname' placeholder='displayName' required name="displayname" id='displayName'></input>
           </div>
 
 
