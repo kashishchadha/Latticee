@@ -2,8 +2,15 @@ import React, { useState } from 'react'
 import Image from '../../components/image/image'
 import './authPage.css'
 import apiRequest from '../../utils/apiRequest';
+import useAuthStore from '../../utils/authStore';
+import { useNavigate } from 'react-router-dom';
 
 function AuthPage() {
+  const Navigate=useNavigate();
+
+  const {setCurrentUser}=useAuthStore();
+
+  
    const [ isRegister,setIsRegister]=useState(false);
     const [error,setError]=useState("");
 
@@ -13,12 +20,17 @@ function AuthPage() {
       const data = Object.fromEntries(formData)
       
       try{
-await apiRequest.post("/user/auth/register", data)
-
-      }catch(error){
-        setError(error.data)
+const res = await apiRequest.post(`/user/auth/${isRegister?"register":"login"}`, data)
+setCurrentUser(res.data)
+       Navigate("/");
       }
+   
+      catch(error){
+  setError(error.response?.data?.message || "Login failed")
+}
+      
     }
+
   return (
    
 
@@ -57,7 +69,7 @@ await apiRequest.post("/user/auth/register", data)
 
 ):(
 
-          <form key="loginForm">
+          <form key="loginForm" onSubmit={handleSubmit}>
           <div className="formGroup">
             <label htmlFor='email'>Email</label>
             <input type='email' placeholder='Email' required name="email"></input>
