@@ -19,3 +19,18 @@ try {
     res.status(500).json({ message: "Failed to add comment", error: error.message });
 }
 }
+
+export const deletecomment=async(req,res)=>{
+    const {id}=req.params;
+    const userid = req.userid;
+if(!userid){
+    return res.status(401).json({message:"not authenticated"});
+}
+    try{
+await Comment.deleteOne({_id:id,user:userid});
+res.status(201).json({message:"deleted"});
+
+    }catch(error){
+    res.status(500).json({ message: "Failed to delete comment", error: error.message });
+    }
+}

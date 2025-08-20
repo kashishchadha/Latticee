@@ -75,3 +75,15 @@
     right: 0;
     bottom: 50px;
 }
+span .btn{
+  margin-left: 10px;
+  padding: 5px 7px;
+
+    background-color: #e50829;
+    color: white;
+    border: none;
+    border-radius: 24px;
+ 
+    font-size: smaller;
+    cursor: pointer;
+}

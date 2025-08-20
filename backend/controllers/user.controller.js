@@ -1,4 +1,5 @@
 import User from "../model/user.model.js"
+import Follow from "../model/follow.model.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 export const  registerUser=async (req,res)=>{
@@ -13,7 +14,7 @@ export const  registerUser=async (req,res)=>{
         email,
         hashPassword:newhashPassword
     });
-     const token=jwt.sign({userId:user._id},process.env.JWT_SCERET)
+     const token=jwt.sign({userid:user._id},process.env.JWT_SCERET)
     res.cookie("token",token,{
         httpOnly:true,
         secure:process.env.Node_ENV==="production",
@@ -61,6 +62,42 @@ export const getUser = async (req, res) => {
         return res.status(404).json({ message: "User not found" });
     }
     const { hashPassword, ...otherDetails } = person.toObject();
-    res.status(200).json(otherDetails);
-}
+    const followingCount = await Follow.countDocuments({ following: person._id });
+    const followerCount = await Follow.countDocuments({ follower: person._id });
 
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(200).json({ ...otherDetails, followerCount, followingCount, isFollowing: false });
+    } else {
+        jwt.verify(token, process.env.JWT_SCERET, async (err, payload) => {
+            if (err) {
+                return res.status(200).json({ ...otherDetails, followerCount, followingCount, isFollowing: false });
+            }
+            const isExist = await Follow.exists({ follower: payload.userid, following: person._id });
+            return res.status(200).json({ ...otherDetails, followerCount, followingCount, isFollowing: !!isExist });
+        });
+    }
+}
+export const followUser = async (req, res) => {
+    const { username } = req.params;
+    const user = await User.findOne({ username }); // Use findOne, not find
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+    const isFollowing = await Follow.exists({
+        follower: req.userid,
+        following: user._id
+    });
+    if (isFollowing) {
+        await Follow.deleteOne({
+            follower: req.userid,
+            following: user._id
+        });
+    } else {
+        await Follow.create({
+            follower: req.userid,
+            following: user._id
+        });
+    }
+    res.status(200).json({ message: "successful" });
+}

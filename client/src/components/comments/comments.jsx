@@ -22,7 +22,7 @@ function Comments({id}) {
         <span className='commentCount'>{data.length===0?"No comments":data.length+"comments"}</span>
        
 {data.map((comment)=>(
-  <Comment key={comment._id} comment={comment}/>
+  <Comment key={comment._id} comment={comment} id={id}/>
 ))}
 
       </div>
