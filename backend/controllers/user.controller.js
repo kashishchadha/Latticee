@@ -62,8 +62,8 @@ export const getUser = async (req, res) => {
         return res.status(404).json({ message: "User not found" });
     }
     const { hashPassword, ...otherDetails } = person.toObject();
-    const followingCount = await Follow.countDocuments({ following: person._id });
-    const followerCount = await Follow.countDocuments({ follower: person._id });
+    const followingCount = await Follow.countDocuments({ follower: person._id });
+    const followerCount = await Follow.countDocuments({ following: person._id });
 
     const token = req.cookies.token;
     if (!token) {
@@ -80,7 +80,7 @@ export const getUser = async (req, res) => {
 }
 export const followUser = async (req, res) => {
     const { username } = req.params;
-    const user = await User.findOne({ username }); // Use findOne, not find
+    const user = await User.findOne({ username }); 
     if (!user) {
         return res.status(404).json({ message: "User not found" });
     }

@@ -10,7 +10,7 @@ const FollowSchema = new Schema(
     },
     following : {
       type: Schema.Types.ObjectId,
-      ref: "Pin",
+      ref: "User",
       required: true,
     },
    

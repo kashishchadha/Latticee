@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './createPage.css'
 import Image from '../../components/image/image'
+import useAuthStore from '../../utils/authStore'
+import { Navigate, useNavigate } from 'react-router'
 function CreatePage() {
+  const {currentUser}=useAuthStore();
+const Navigate=useNavigate();
+useEffect(()=>{
+if(!currentUser){
+  Navigate("/auth")
+}
+}
+,[currentUser,Navigate])
+const [file,setFile]=useState(null);
+const imagePreviewUrl=file?URL.createObjectURL(file):null;
   return (
   <div className="createPage">
     <div className="createTop">
@@ -9,7 +21,14 @@ function CreatePage() {
       <button>Publish</button>
     </div>
     <div className="createBottom">
-      <div className="upload">
+
+      {imagePreviewUrl?(<div className='preview'>
+<img  src={imagePreviewUrl} alt=''></img>
+<div className="editIcon">
+  <Image path='/general/edit.svg' alt=''></Image>
+</div>
+
+      </div>):(<> <label htmlFor='file' className="upload">
         <div className="uploadTitle">
           <Image path="/general/upload.svg" alt=""/>
           <span>Choose a file</span>
@@ -18,8 +37,10 @@ function CreatePage() {
   We recommend using high quality .jpg files less than 20 files less than 200 MB
 </div>
 
-      </div>
+      </label></>)}
+     
 
+<input type='file' id='file' hidden  onChange={(e)=> setFile(e.target.files[0])}/>
       <form className='createForm'>
 <div className="createFormItem">
   <label htmlFor="title">Title</label>
