@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './createPage.css'
-import Image from '../../components/image/image'
+import IKImage from '../../components/image/image'
 import useAuthStore from '../../utils/authStore'
 import { Navigate, useNavigate } from 'react-router'
+import Editor from '../../components/editor/editor'
 function CreatePage() {
   const {currentUser}=useAuthStore();
 const Navigate=useNavigate();
@@ -13,24 +14,46 @@ if(!currentUser){
 }
 ,[currentUser,Navigate])
 const [file,setFile]=useState(null);
-const imagePreviewUrl=file?URL.createObjectURL(file):null;
+const [previewImg,setPreviewImg]=useState({
+  url:"",
+  width:0,
+  height:0,
+});
+
+const [isEditing,setIsEditing]=useState(false);
+useEffect(()=>{
+  if(file){
+  const img=new Image();
+  img.src=URL.createObjectURL(file);
+  img.onload=()=>{
+setPreviewImg({
+  url:URL.createObjectURL(file),
+  width:img.width,
+  height:img.height
+})
+  }
+}
+},[file])
+console.log(previewImg.url)
   return (
   <div className="createPage">
     <div className="createTop">
-      <h1>Create Pin</h1>
-      <button>Publish</button>
+      <h1>{isEditing?"Design your pin":"Create Pin"}</h1>
+      <button>{isEditing?"Done":"Publish"}</button>
     </div>
+
+    {isEditing?(<Editor previewImg={previewImg}/>):(
     <div className="createBottom">
 
-      {imagePreviewUrl?(<div className='preview'>
-<img  src={imagePreviewUrl} alt=''></img>
-<div className="editIcon">
-  <Image path='/general/edit.svg' alt=''></Image>
+      {previewImg.url?(<div className='preview'>
+<img  src={previewImg.url} alt=''></img>
+<div className="editIcon" onClick={()=>setIsEditing(true)}>
+  <IKImage path='/general/edit.svg' alt=''/>
 </div>
 
       </div>):(<> <label htmlFor='file' className="upload">
         <div className="uploadTitle">
-          <Image path="/general/upload.svg" alt=""/>
+          <IKImage path="/general/upload.svg" alt=""/>
           <span>Choose a file</span>
         </div>
 <div className="uploadInfo">
@@ -80,6 +103,7 @@ const imagePreviewUrl=file?URL.createObjectURL(file):null;
 
       </form>
     </div>
+    )}
   </div>
   )
 }

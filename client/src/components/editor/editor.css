@@ -1,0 +1,13 @@
+.editor{
+    display: flex;
+    gap: 16px;
+}
+ .layers{
+    flex: 1;
+ }
+ .workspace{
+    flex: 3;
+ }
+ .options{
+    flex: 1;
+ }
