@@ -67,6 +67,7 @@
 
 .text {
   position: absolute;
+  margin-top: 32px;
   z-index: 999;
   max-width: 100%;
   border: 1px dashed red;
@@ -83,11 +84,11 @@
 
 .deleteTextButton {
   position: absolute;
-  top: -36px;
+  top: -6px;
   right: 0;
   background-color: white;
-  width: 32px;
-  height: 32px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
