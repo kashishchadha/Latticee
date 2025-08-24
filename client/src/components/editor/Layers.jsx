@@ -1,9 +1,12 @@
 import useEditorStore from '../../utils/editorStore.js'
 import Image from '../image/image.jsx'
 const Layers=()=>{
-const {selectedLayer, setSelectedLayer}=useEditorStore()
+const {selectedLayer, setSelectedLayer,addText}=useEditorStore()
 const handleSelectedLayer=(layer)=>{
 setSelectedLayer(layer);
+if(layer=="text"){
+    addText();
+}
 }
     return(<><div className="layers">
         <div className="layersTitle">
