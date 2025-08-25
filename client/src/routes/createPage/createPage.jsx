@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './createPage.css'
 import IKImage from '../../components/image/image'
 import useAuthStore from '../../utils/authStore'
-import { Navigate, useNavigate } from 'react-router'
+import {  useNavigate } from 'react-router-dom'
 import Editor from '../../components/editor/editor'
+import useEditorStore from '../../utils/editorStore'
+import apiRequest from '../../utils/apiRequest'
 function CreatePage() {
+  const {textOptions,canvasOptions}=useEditorStore();
+
   const {currentUser}=useAuthStore();
 const Navigate=useNavigate();
 useEffect(()=>{
@@ -13,6 +17,7 @@ if(!currentUser){
 }
 }
 ,[currentUser,Navigate])
+const formRef=useRef();
 const [file,setFile]=useState(null);
 const [previewImg,setPreviewImg]=useState({
   url:"",
@@ -34,12 +39,33 @@ setPreviewImg({
   }
 }
 },[file])
-console.log(previewImg.url)
+
+const handlesubmit= async()=>{
+  if(isEditing){
+    setIsEditing(false);
+    return;
+  }
+  const formData=new FormData(formRef.current);
+  formData.append("media",file);
+  formData.append("textOptions",textOptions);
+  formData.append("canvasOptions",canvasOptions);
+
+  try{
+    const res=await apiRequest.post("/pin",formData,{
+      headers:{
+        "Content-Type":"multipart/form-data",
+      },
+    });
+    console.log(res)
+  }catch(err){
+    console.log(err);
+  }
+}
   return (
   <div className="createPage">
     <div className="createTop">
       <h1>{isEditing?"Design your pin":"Create Pin"}</h1>
-      <button>{isEditing?"Done":"Publish"}</button>
+      <button onClick={handlesubmit}>{isEditing?"Done":"Publish"}</button>
     </div>
 
     {isEditing?(<Editor previewImg={previewImg}/>):(
@@ -64,7 +90,7 @@ console.log(previewImg.url)
      
 
 <input type='file' id='file' hidden  onChange={(e)=> setFile(e.target.files[0])}/>
-      <form className='createForm'>
+      <form className='createForm' ref={formRef}>
 <div className="createFormItem">
   <label htmlFor="title">Title</label>
   <input type='text' placeholder='Add a title' name='title'
