@@ -47,9 +47,9 @@ const handlesubmit= async()=>{
   }
   const formData=new FormData(formRef.current);
   formData.append("media",file);
-  formData.append("textOptions",textOptions);
-  formData.append("canvasOptions",canvasOptions);
-
+  formData.append("textOptions",JSON.stringify(textOptions));
+  formData.append("canvasOptions",JSON.stringify(canvasOptions));
+  formData.append("link", formRef.current.link.value);
   try{
     const res=await apiRequest.post("/pin",formData,{
       headers:{
