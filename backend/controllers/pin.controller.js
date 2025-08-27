@@ -29,9 +29,9 @@ res.status(200).json(pindoc);
 export const createPin=async(req,res)=>{
     const {title,description ,tags,board,link,textOptions,canvasOptions}=req.body;
     const media=req.files.media;
-    if(!title||!description||!media||!link){
-        res.status(400).message({message:"All fields are required"});
-    }
+  if(!title||!description||!media||!link){
+    return res.status(400).json({message:"All fields are required"});
+  }
          const parsedTextOptions = JSON.parse(textOptions || "{}");
   const parsedCanvasOptions = JSON.parse(canvasOptions || "{}");
 
@@ -42,27 +42,175 @@ export const createPin=async(req,res)=>{
   const originalAspectRatio = metadata.width / metadata.height;
 
   let clientAspectRatio;
-  let width;
-  let height;
-
+  let width = 0;
+  let height = 0;
   if (parsedCanvasOptions.size !== "original") {
-    clientAspectRatio =
-      parsedCanvasOptions.size.split(":")[0] /
-      parsedCanvasOptions.size.split(":")[1];
+    const sizeParts = parsedCanvasOptions.size.split(":");
+    const w = Number(sizeParts[0]);
+    const h = Number(sizeParts[1]);
+    clientAspectRatio = (isFinite(w) && isFinite(h) && h !== 0) ? w / h : 1;
   } else {
-    parsedCanvasOptions.orientation === originalOrientation
-      ? (clientAspectRatio = originalOrientation)
-      : (clientAspectRatio = 1 / originalAspectRatio);
+    clientAspectRatio =
+      parsedCanvasOptions.orientation === originalOrientation
+        ? originalAspectRatio
+        : 1 / originalAspectRatio;
   }
 
   width = metadata.width;
   height = metadata.width / clientAspectRatio;
+  if (!isFinite(height) || height <= 0) height = metadata.height;
 
-const imagekit=new Imagekit({
-    publicKey:process.env.IK_PUBLIC_KEY,
-    privateKey:process.env.IK_PRIVATE_KEY,
-    urlEndpoint:process.env.IIK_URL_ENDPOINT
-})
+const textLeftPosition = Math.round((Number(parsedTextOptions.left) * width) / 375);
+const canvasHeight = isFinite(Number(parsedCanvasOptions.height)) && Number(parsedCanvasOptions.height) > 0 ? Number(parsedCanvasOptions.height) : height;
+const textTopPosition = Math.round((Number(parsedTextOptions.top) * height) / canvasHeight);
 
+const safeLeft = isFinite(textLeftPosition) ? Math.max(0, textLeftPosition) : 0;
+const safeTop = isFinite(textTopPosition) ? Math.max(0, textTopPosition) : 0;
+const safeHeight = isFinite(height) ? height : metadata.height;
+const safeFontSize = isFinite(Number(parsedTextOptions.fontSize)) ? Number(parsedTextOptions.fontSize) : 48;
 
+  let croppingStrategy = "";
+
+  if (parsedCanvasOptions.size !== "original") {
+    if (originalAspectRatio > clientAspectRatio) {
+      let croppingStrategy = "";
+
+      if (parsedCanvasOptions.size !== "original") {
+        if (originalAspectRatio > clientAspectRatio) {
+          croppingStrategy = ",cm-pad_resize";
+        }
+      } else {
+        if (
+          originalOrientation === "landscape" &&
+          parsedCanvasOptions.orientation === "portrait"
+        ) {
+          croppingStrategy = ",cm-pad_resize";
+        }
+      }
+
+      const imagekit = new Imagekit({
+        publicKey: process.env.IK_PUBLIC_KEY,
+        privateKey: process.env.IK_PRIVATE_KEY,
+        urlEndpoint: process.env.IK_URL_ENDPOINT
+      });
+
+      const transformationString = `w-${width},h-${safeHeight}${croppingStrategy},bg-${parsedCanvasOptions.backgroundColor.substring(1)}${
+        parsedTextOptions.text
+          ? `,l-text,i-${parsedTextOptions.text},fs-${safeFontSize * 2.1},lx-${safeLeft},ly-${safeTop},co-${parsedTextOptions.color.substring(1)},l-end`
+          : ""
+      }`;
+
+      imagekit
+        .upload({
+          file: media.data,
+          fileName: media.name,
+          folder: "test",
+          transformation: {
+            pre: transformationString,
+          },
+        })
+        .then(async (response) => {
+          const newPin = await pin.create({
+            user: req.userid,
+            title,
+            description,
+            link: link || null,
+            board:  board || null,
+            tags: tags ? tags.split(",").map((tag) => tag.trim()) : [],
+            media: response.filePath,
+            width: response.width,
+            height: response.height,
+          });
+          const populatedPin = await pin.findById(newPin._id).populate("user", "username img displayname");
+          return res.status(201).json(populatedPin);
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).json(err);
+        });
+    } else {
+      const imagekit = new Imagekit({
+        publicKey: process.env.IK_PUBLIC_KEY,
+        privateKey: process.env.IK_PRIVATE_KEY,
+        urlEndpoint: process.env.IK_URL_ENDPOINT
+      });
+
+      const transformationString = `w-${width},h-${safeHeight}${croppingStrategy},bg-${parsedCanvasOptions.backgroundColor.substring(1)}${
+        parsedTextOptions.text
+          ? `,l-text,i-${parsedTextOptions.text},fs-${safeFontSize * 2.1},lx-${safeLeft},ly-${safeTop},co-${parsedTextOptions.color.substring(1)},l-end`
+          : ""
+      }`;
+
+      imagekit
+        .upload({
+          file: media.data,
+          fileName: media.name,
+          folder: "test",
+          transformation: {
+            pre: transformationString,
+          },
+        })
+        .then(async (response) => {
+          const newPin = await pin.create({
+            user: req.userid,
+            title,
+            description,
+            link: link || null,
+            board:  board || null,
+            tags: tags ? tags.split(",").map((tag) => tag.trim()) : [],
+            media: response.filePath,
+            width: response.width,
+            height: response.height,
+          });
+          const populatedPin = await pin.findById(newPin._id).populate("user", "username img displayname");
+          return res.status(201).json(populatedPin);
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).json(err);
+        });
+    }
+  } else {
+    const imagekit = new Imagekit({
+      publicKey: process.env.IK_PUBLIC_KEY,
+      privateKey: process.env.IK_PRIVATE_KEY,
+      urlEndpoint: process.env.IK_URL_ENDPOINT
+    });
+
+    const transformationString = `w-${width},h-${safeHeight}${croppingStrategy},bg-${parsedCanvasOptions.backgroundColor.substring(1)}${
+      parsedTextOptions.text
+        ? `,l-text,i-${parsedTextOptions.text},fs-${safeFontSize * 2.1},lx-${safeLeft},ly-${safeTop},co-${parsedTextOptions.color.substring(1)},l-end`
+        : ""
+    }`;
+
+    imagekit
+      .upload({
+        file: media.data,
+        fileName: media.name,
+        folder: "test",
+        transformation: {
+          pre: transformationString,
+        },
+      })
+      .then(async (response) => {
+        const newPin = await pin.create({
+          user: req.userid,
+          title,
+          description,
+          link: link || null,
+          board:  board || null,
+          tags: tags ? tags.split(",").map((tag) => tag.trim()) : [],
+          media: response.filePath,
+          width: response.width,
+          height: response.height,
+        });
+        const populatedPin = await pin.findById(newPin._id).populate("user", "username img displayname");
+        return res.status(201).json(populatedPin);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
+  }
 };
+

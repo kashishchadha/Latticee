@@ -30,6 +30,7 @@ useEffect(()=>{
   if(file){
   const img=new Image();
   img.src=URL.createObjectURL(file);
+  console.log(img.height);
   img.onload=()=>{
 setPreviewImg({
   url:URL.createObjectURL(file),
@@ -46,17 +47,26 @@ const handlesubmit= async()=>{
     return;
   }
   const formData=new FormData(formRef.current);
+const safeTextOptions = {
+  ...textOptions,
+  height:Math.ceil(textOptions.height),
+  left: Math.max(0, Number(textOptions.left)),
+  top: Math.max(0, Number(textOptions.top)),
+  fontSize: Number(textOptions.fontSize),
+};
   formData.append("media",file);
-  formData.append("textOptions",JSON.stringify(textOptions));
+  formData.append("textOptions",JSON.stringify(safeTextOptions));
   formData.append("canvasOptions",JSON.stringify(canvasOptions));
-  formData.append("link", formRef.current.link.value);
+  console.log(JSON.stringify(textOptions));
+  console.log(JSON.stringify(canvasOptions));
   try{
+   
     const res=await apiRequest.post("/pin",formData,{
       headers:{
         "Content-Type":"multipart/form-data",
       },
     });
-    console.log(res)
+   Navigate(`/pin/${res.data._id}`)
   }catch(err){
     console.log(err);
   }
@@ -112,10 +122,10 @@ const handlesubmit= async()=>{
 <div className="createFormItem">
   <label htmlFor="board">Board</label>
   <select name='board' id='board'>
-    <option >Choose a board</option>
-     <option value="1">board1</option>
-      <option value="2">board2</option>
-       <option value="3">board3</option>
+    <option value="">Choose a board</option>
+    <option value="64e8b2f1c2a4e2b1d8f9a123">Board 1</option>
+    <option value="64e8b2f1c2a4e2b1d8f9a124">Board 2</option>
+    <option value="64e8b2f1c2a4e2b1d8f9a125">Board 3</option>
   </select>
 </div>
 

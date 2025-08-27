@@ -15,6 +15,7 @@ function PostPage() {
   if(isPending) return "Loading...";
   if(error) return "errro occured :"+ error.message;
   if(!data) return "pin not found"
+  console.log(data);
   return (
     <div className='postPage'>
         <svg
@@ -27,13 +28,13 @@ function PostPage() {
       </svg>
 <div className="postContainer">
   <div className="postImage">
-    <Image src={data.media} alt="" w={736}/>
+    <Image path={data.media} alt="" w={736}/>
   </div>
   <div className="postDetails">
     <PostInteraction/>
-    <Link to={`/${data.user.username}`} className='postUser'>
-    <Image src={data.user.img || "/general/noAvatar.png"}/>
-    <span>{data.user.displayname}</span>
+    <Link to={`/${data?.user?.username}`} className='postUser'>
+    <Image path={data?.user?.img || "/general/noAvatar.png"}/>
+    <span>{data?.user?.displayname}</span>
     
     </Link>
     <Comments id={id}/>

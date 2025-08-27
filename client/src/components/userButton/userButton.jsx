@@ -27,7 +27,7 @@ const [open,setOpen]=useState(false);
      </div>
      {open && (
        <div className="useroptions">
-        <Link  to={`/profile/${currentUser.username}`} className="useroption">Profile</Link>
+        <Link  to={`/${currentUser.username}`} className="useroption">Profile</Link>
                 <div className="useroption">Setting</div>
                         <div onClick={handleLogout} className="useroption">Logout</div>
 
