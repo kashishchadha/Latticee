@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Image from '../../components/image/image'
-import './ProfilePage.css'
+import './profilePage.css'
 import Gallery from '../../components/gallery/gallery'
 import apiRequest from '../../utils/apiRequest'
 import { useParams } from 'react-router'
