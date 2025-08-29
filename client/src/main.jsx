@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import {BrowserRouter,Route,Routes} from  "react-router"
 import HomePage from './routes/homePage/homePage.jsx'
-import CreatePage from './routes/createpage/createPage.jsx'
+import CreatePage from './routes/createPage/createPage.jsx'
 import PostPage from './routes/postpage/postPage.jsx'
 import AuthPage from './routes/authPage/authPage.jsx'
 import ProfilePage from './routes/profilePage/profilePage.jsx'
