@@ -24,7 +24,6 @@ mutation.mutate()
   return (
     <div className="comment">
 <Image
-  path={!comment.user.img ? "/general/noAvatar.png" : undefined}
   src={comment.user.img && comment.user.img.startsWith("http") ? comment.user.img : undefined}
   alt=""
 />      <div className="commentContent">

@@ -36,7 +36,7 @@ setCurrentUser(res.data)
 
     <div className="authPage">
       <div className="authContainer">
-        <Image path="/general/logo.png" alt=""/>
+        <Image src="/general/logo.png" alt=""/>
         <h1>{isRegister?"Create an Account ":"Login to Your Account"}</h1>
 {isRegister?(
 

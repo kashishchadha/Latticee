@@ -93,7 +93,7 @@ const Workspace = ({ previewImg }) => {
               className="deleteTextButton"
               onClick={() => setTextOptions({ ...textOptions, text: "" })}
             >
-              <Image path="/general/delete.svg" alt="" />
+              <Image src="/general/delete.svg" alt="" />
             </div>
           </div>
         )}

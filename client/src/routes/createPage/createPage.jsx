@@ -84,12 +84,12 @@ const safeTextOptions = {
       {previewImg.url?(<div className='preview'>
 <img  src={previewImg.url} alt=''></img>
 <div className="editIcon" onClick={()=>setIsEditing(true)}>
-  <IKImage path='/general/edit.svg' alt=''/>
+  <IKImage src='/general/edit.svg' alt=''/>
 </div>
 
       </div>):(<> <label htmlFor='file' className="upload">
         <div className="uploadTitle">
-          <IKImage path="/general/upload.svg" alt=""/>
+          <IKImage src="/general/upload.svg" alt=""/>
           <span>Choose a file</span>
         </div>
 <div className="uploadInfo">

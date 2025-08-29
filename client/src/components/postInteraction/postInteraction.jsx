@@ -30,8 +30,8 @@ function PostInteraction({postid}) {
             stroke={data.isLiked ? "#e50829" : "#000000"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={data.isLiked ? "#e50829" : "none"} />
         </svg>
         <span>{data.likeCount}</span>
-        <Image path="/general/share.svg" alt="" />
-        <Image path="/general/more.svg" alt="" />
+        <Image src="/general/share.svg" alt="" />
+        <Image src="/general/more.svg" alt="" />
       </div>
       <button onClick={() => mutation.mutate({id: postid, type: "save"})}>{data.isSaved ? "saved" : "save"}</button>
     </div>

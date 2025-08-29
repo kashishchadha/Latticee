@@ -7,26 +7,26 @@ function LeftBar() {
     <div className="leftBar">
         <div className="menueIcons">
             <Link to="/" className='menueIcon'>
-            <Image path='/general/logo.png'className='logo' alt='' />
+            <Image src='/general/logo.png'className='logo' alt='' />
             </Link>
                <Link to="/" className='menueIcon'>
-            <Image path='/general/home.svg' alt='' />
+            <Image src='/general/home.svg' alt='' />
            </Link>
 
                 <Link to="/create" className='menueIcon'>
-            <Image path='/general/create.svg' alt='' />
+            <Image src='/general/create.svg' alt='' />
             </Link>
              
                <Link to="" className='menueIcon'>
-            <Image path='/general/updates.svg' alt='' />
+            <Image src='/general/updates.svg' alt='' />
             </Link>
                <Link to="" className='menueIcon'>
-            <Image path='/general/messages.svg' alt='' />
+            <Image src='/general/messages.svg' alt='' />
             </Link>
          
         </div>
            <Link to="" className='menueIcon'>
-            <Image path='/general/settings.svg' alt='' />
+            <Image src='/general/settings.svg' alt='' />
             </Link>
     </div>
   )

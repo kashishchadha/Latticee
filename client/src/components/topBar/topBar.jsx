@@ -15,7 +15,7 @@ Navigate(`/search?search=${e.target[0].value}`)
 <div className="topBar">
 <form onSubmit={handleSubmit} className="search">
 
-    <Image path='/general/search.svg' alt='' />
+    <Image src='/general/search.svg' alt='' />
     <input type="text" placeholder='Search' />
 </form>
 <UserButton/>

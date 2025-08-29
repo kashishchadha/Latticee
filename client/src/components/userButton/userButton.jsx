@@ -21,9 +21,11 @@ const [open,setOpen]=useState(false);
   return currentUser?(
     <div className='userButton'>
       
-      <Image path={currentUser.img || "/general/noAvatar.png"} alt=""></Image>
+      <Image src={currentUser.img || "/general/noAvatar.png"}  alt=""></Image>
       <div   onClick={()=>setOpen((prev)=>!prev)} >
-       <Image path="/general/arrow.svg" alt="" className='arrow'></Image>
+        <div className="arrows">
+      <Image src="/general/arrow.svg" alt="" className='arrow'  ></Image>
+      </div>
      </div>
      {open && (
        <div className="useroptions">

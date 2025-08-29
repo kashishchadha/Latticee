@@ -11,10 +11,18 @@
     border: 100%;
     object-fit: cover;
 }
-.userButton .arrow{
-    height: 16px;
-    width: 16px;
+.userButton .arrows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 12px;
+    width: 12px;
     cursor: pointer;
+}
+.arrows img{
+    height: 19px;
+    width: 19px;
 }
 .loginlink{
     font-size: 15px;

@@ -190,7 +190,7 @@ const safeFontSize = isFinite(Number(parsedTextOptions.fontSize)) ? Number(parse
       .upload({
         file: media.data,
         fileName: media.name,
-        folder: "test",
+        folder: "pin",
         transformation: {
           pre: transformationString,
         },

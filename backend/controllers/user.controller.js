@@ -14,7 +14,7 @@ export const  registerUser=async (req,res)=>{
         email,
         hashPassword:newhashPassword
     });
-     const token=jwt.sign({userid:user._id},process.env.JWT_SCERET)
+     const token=jwt.sign({userid:user._id},process.env.JWT_SECRET)
     res.cookie("token",token,{
         httpOnly:true,
         secure:process.env.Node_ENV==="production",
@@ -40,7 +40,7 @@ if(!user){
            return  res.status(400).json({message:"Invalid email or password !"})
    
     }
-    const token=jwt.sign({userid:user._id},process.env.JWT_SCERET)
+    const token=jwt.sign({userid:user._id},process.env.JWT_SECRET)
     res.cookie("token",token,{
         httpOnly:true,
         secure:process.env.Node_ENV==="production",
@@ -69,7 +69,7 @@ export const getUser = async (req, res) => {
     if (!token) {
         return res.status(200).json({ ...otherDetails, followerCount, followingCount, isFollowing: false });
     } else {
-        jwt.verify(token, process.env.JWT_SCERET, async (err, payload) => {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
             if (err) {
                 return res.status(200).json({ ...otherDetails, followerCount, followingCount, isFollowing: false });
             }
