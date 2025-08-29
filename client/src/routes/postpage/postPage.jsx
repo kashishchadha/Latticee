@@ -31,7 +31,7 @@ function PostPage() {
     <Image path={data.media} alt="" w={736}/>
   </div>
   <div className="postDetails">
-    <PostInteraction/>
+    <PostInteraction postid={id}/>
     <Link to={`/${data?.user?.username}`} className='postUser'>
     <Image path={data?.user?.img || "/general/noAvatar.png"}/>
     <span>{data?.user?.displayname}</span>

@@ -1,5 +1,8 @@
 import pin from '../model/pin.model.js'
 import User from "../model/user.model.js"
+import Like from "../model/like.model.js"
+import Save from "../model/save.model.js"
+import jwt from "jsonwebtoken"
 import sharp from "sharp"
 import Imagekit from "imagekit"
 
@@ -214,3 +217,83 @@ const safeFontSize = isFinite(Number(parsedTextOptions.fontSize)) ? Number(parse
   }
 };
 
+export const interactionCheck = async (req, res) => {
+  const { id } = req.params;
+  const token = req.cookies.token;
+
+  const likeCount = await Like.countDocuments({ pin: id });
+
+  if (!token) {
+    return res.status(200).json({ likeCount, isLiked: false, isSaved: false });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
+    if (err) {
+      return res
+        .status(200)
+        .json({ likeCount, isLiked: false, isSaved: false });
+    }
+
+    const userid = payload.userid;
+
+    const isLiked = await Like.findOne({
+      user: userid,
+      pin: id,
+    });
+    const isSaved = await Save.findOne({
+      user: userid,
+      pin: id,
+    });
+
+    return res.status(200).json({
+      likeCount,
+      isLiked: isLiked ? true : false,
+      isSaved: isSaved ? true : false,
+    });
+  });
+};
+
+
+export const interact = async (req, res) => {
+  const { id } = req.params;
+
+  const { type } = req.body;
+
+  if (type === "like") {
+    const isLiked = await Like.findOne({
+      pin: id,
+      user: req.userid,
+    });
+
+    if (isLiked) {
+      await Like.deleteOne({
+        pin: id,
+        user: req.userid,
+      });
+    } else {
+      await Like.create({
+        pin: id,
+        user: req.userid,
+      });
+    }
+  } else {
+    const isSaved = await Save.findOne({
+      pin: id,
+      user: req.userid,
+    });
+
+    if (isSaved) {
+      await Save.deleteOne({
+        pin: id,
+        user: req.userid,
+      });
+    } else {
+      await Save.create({
+        pin: id,
+        user: req.userid,
+      });
+    }
+  }
+
+  return res.status(200).json({ message: "Successful" });
+};
