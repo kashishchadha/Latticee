@@ -1,5 +1,6 @@
 <div align="center">
-  <h1>🌟 Latticee</h1>
+    <img src="client/public/general/logo.png" alt="Latticee Logo" width="80" height="80" />
+  <h1> Latticee</h1>
   <p><strong>A Modern Visual Discovery & Sharing Platform</strong></p>
   
   <p>
