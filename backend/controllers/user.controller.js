@@ -44,7 +44,8 @@ if(!user){
     const token=jwt.sign({userid:user._id},process.env.JWT_SECRET)
     res.cookie("token",token,{
         httpOnly:true,
-        secure:process.env.Node_ENV==="production",
+        secure:true,
+        sameSite:"none",
         maxAge:30*24*60*60*1000,
     })
     const {hashPassword,...otherdetails}=user.toObject();
