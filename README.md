@@ -61,6 +61,33 @@
 
 ---
 
+## 📸 Screenshots
+
+<div align="center">
+
+### 🏠 Homepage
+<img src="./Screenshots/HomePage.png" alt="Latticee Homepage" width="800" />
+
+### ✍️ Create Post
+<img src="./Screenshots/CreatePage.png" alt="Create Post Interface" width="800" />
+
+### 📖 Post View
+<img src="./Screenshots/PostPage.png" alt="Post Reading Interface" width="800" />
+
+### 📱 Edit ImagePage
+<img src="./Screenshots/ImageEdit.png" alt="Search Page Design" width="800" />
+
+### 📱 Register Page
+<img src="./Screenshots/RegisterPage.png" alt="Search Page Design" width="800" />
+
+### 📱 User Page
+<img src="./Screenshots/UserPage.png" alt="Search Page Design" width="800" />
+
+
+</div>
+
+---
+
 ## 🛠️ Tech Stack
 
 <div align="center">
