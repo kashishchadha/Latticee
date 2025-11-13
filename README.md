@@ -1,7 +1,7 @@
 <div align="center">
     <img src="client/public/general/logo.png" alt="Latticee Logo" width="80" height="80" />
   <h1> Latticee</h1>
-  <p><strong>A Modern Visual Discovery & Sharing Platform</strong></p>
+  <p><strong>A Modern Visual Discovery & Sharing Platform with Authentication</strong></p>
   
   <p>
     <img src="https://img.shields.io/badge/React-19.1.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
